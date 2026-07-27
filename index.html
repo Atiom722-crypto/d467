@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en" data-contrast="off">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
+<meta name="theme-color" content="#070d12">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="D467">
+<title>D467 Mastery, mobile</title>
+<style>
+  :root{
+    --bg:#070d12; --panel:#0d151d; --panel-2:#111c26; --line:#1d2c39;
+    --ink:#e8f1f5; --ink-soft:#8fa6b4; --ink-faint:#5d7382;
+    --teal:#2dd4bf; --teal-deep:#0f766e; --amber:#f5b642; --rose:#f2637e;
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --tabbar:calc(64px + env(safe-area-inset-bottom));
+  }
+  html[data-contrast="on"]{--bg:#000;--panel:#000;--panel-2:#0a0a0a;--line:#2dd4bf;--ink:#fff;--ink-soft:#e6f7f4;--ink-faint:#bfe9e2}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overscroll-behavior-y:contain}
+  body{padding:calc(12px + env(safe-area-inset-top)) 14px var(--tabbar);min-height:100vh;min-height:100dvh}
+  button{font-family:inherit;color:inherit;touch-action:manipulation;cursor:pointer}
+  :focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+  .shell{max-width:640px;margin:0 auto}
+  .badge{font:700 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--teal);
+    border:1px solid rgba(45,212,191,.4);background:rgba(45,212,191,.08);padding:6px 8px;border-radius:6px}
+  h1{margin:10px 0 2px;font-size:22px;font-weight:800;letter-spacing:-.02em}
+  .sub{margin:0;color:var(--ink-soft);font-size:13px;line-height:1.5}
+  .toprow{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:14px;
+    padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .mini{font:700 11px/1 var(--mono);padding:9px 11px;border-radius:9px;border:1px solid var(--line);
+    background:var(--panel);color:var(--ink-faint)}
+  .mini.ok{color:var(--teal);border-color:rgba(45,212,191,.4)}
+  .mini.off{color:var(--amber);border-color:rgba(245,182,66,.4)}
+
+  .eyebrow{font:700 10px/1.3 var(--mono);letter-spacing:.15em;text-transform:uppercase;color:var(--ink-faint)}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:14px}
+  .muted{color:var(--ink-soft);font-size:13.5px;line-height:1.65}
+  .big{font:800 40px/1 var(--sans);letter-spacing:-.03em}
+  .rail{height:9px;border-radius:99px;background:var(--panel-2);border:1px solid var(--line);overflow:hidden}
+  .rail>i{display:block;height:100%;background:linear-gradient(90deg,var(--teal-deep),var(--teal));transition:width .5s ease}
+  .stat-row{display:flex;justify-content:space-between;font:700 12px/1 var(--mono);color:var(--ink-soft);margin:14px 0 7px}
+  .ladder{display:flex;gap:4px;align-items:flex-end;height:48px;margin-top:14px}
+  .ladder span{flex:1;border-radius:3px 3px 0 0;background:var(--panel-2);border:1px solid var(--line)}
+  .ladder span.lit{background:linear-gradient(180deg,var(--teal),var(--teal-deep));border-color:transparent}
+
+  .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:52px;
+    border-radius:13px;font-size:15px;font-weight:700;border:1px solid var(--line);background:var(--panel-2);margin-top:10px}
+  .btn.solid{background:var(--teal);color:#04211f;border-color:transparent}
+  .btn.solid:active{background:#5ee7d7}
+  .btn:active{border-color:var(--teal)}
+  .btn[disabled]{opacity:.45;pointer-events:none}
+  .btn.row{width:auto;flex:1;min-height:48px;font-size:14px}
+  .btn-row{display:flex;gap:10px}
+  .lockline{display:flex;gap:7px;align-items:center;font:700 11.5px/1.5 var(--mono);color:var(--ink-faint);margin-top:12px}
+  .chip{font:800 11px/1 var(--mono);padding:7px 9px;border-radius:6px;border:1px solid var(--line);color:var(--ink-soft)}
+  .chip.pass{color:var(--teal);border-color:rgba(45,212,191,.45);background:rgba(45,212,191,.08)}
+  .chip.fail{color:var(--amber);border-color:rgba(245,182,66,.45);background:rgba(245,182,66,.08)}
+  h3.title{margin:9px 0 6px;font-size:17px;font-weight:700;letter-spacing:-.01em}
+
+  /* study */
+  .filters{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .filters::-webkit-scrollbar{display:none}
+  .fchip{flex:0 0 auto;background:var(--panel);border:1px solid var(--line);color:var(--ink-soft);
+    font-size:13px;font-weight:700;padding:11px 15px;border-radius:99px;white-space:nowrap}
+  .fchip[aria-pressed="true"]{background:rgba(45,212,191,.13);color:var(--teal);border-color:rgba(45,212,191,.5)}
+  .crumb{display:flex;justify-content:space-between;gap:10px;font:700 11px/1.4 var(--mono);color:var(--ink-faint);margin-bottom:9px}
+  .crumb .path{color:var(--teal);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .scene{perspective:1200px;touch-action:pan-y}
+  .card{position:relative;width:100%;min-height:64vh;transform-style:preserve-3d;
+    transition:transform .5s cubic-bezier(.2,.8,.2,1);user-select:none;-webkit-user-select:none}
+  .card.flipped{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;
+    display:flex;flex-direction:column;justify-content:space-between;overflow-y:auto}
+  .face.back{transform:rotateY(180deg);border-color:rgba(45,212,191,.4)}
+  .ftop{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .glyph{font-size:30px}
+  .term{font-size:27px;font-weight:800;letter-spacing:-.025em;margin:8px 0 0;line-height:1.2}
+  .center{text-align:center;margin:auto 0;padding:14px 0}
+  .hint{font-size:12.5px;color:var(--ink-faint);margin-top:14px}
+  .def{font-size:16px;line-height:1.7;margin:auto 0}
+  pre.sql{margin:14px 0 0;padding:12px;background:#04090d;border:1px solid var(--line);border-radius:11px;
+    font:500 12.5px/1.65 var(--mono);color:#6ee7b7;white-space:pre-wrap;overflow-x:auto}
+  .ffoot{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid var(--line);
+    padding-top:12px;margin-top:12px;font:700 11px/1 var(--mono);color:var(--ink-faint)}
+  .tap{background:transparent;border:none;padding:10px;border-radius:10px;display:inline-flex;align-items:center;gap:6px;
+    font:700 12px/1 var(--mono);color:var(--ink-faint)}
+  .tap.on{color:var(--teal);background:rgba(45,212,191,.12)}
+  .swipebar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px}
+  .round{width:56px;height:56px;flex:0 0 auto;border-radius:50%;background:var(--panel);border:1px solid var(--line);
+    display:inline-flex;align-items:center;justify-content:center}
+  .round:active{border-color:var(--teal);color:var(--teal)}
+
+  /* exam */
+  .examtop{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0 12px;margin-bottom:2px}
+  .clockrow{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .clock{font:800 30px/1 var(--mono);letter-spacing:-.02em}
+  .clock.warn{color:var(--amber)} .clock.crit{color:var(--rose)}
+  .tbar{height:7px;background:var(--panel-2);border:1px solid var(--line);border-radius:99px;overflow:hidden;margin-top:10px}
+  .tbar>i{display:block;height:100%;background:var(--teal);transition:width 1s linear}
+  .tbar.warn>i{background:var(--amber)} .tbar.crit>i{background:var(--rose)}
+  .qtext{font-size:19px;font-weight:700;line-height:1.5;letter-spacing:-.01em;margin:6px 0 16px}
+  .opt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;min-height:60px;
+    background:var(--panel-2);border:1px solid var(--line);border-radius:14px;padding:16px;
+    font-size:15.5px;line-height:1.5;margin-bottom:10px}
+  .opt b{font:800 12px/1.5 var(--mono);color:var(--teal)}
+  .opt.right{border-color:var(--teal);background:rgba(45,212,191,.14)}
+  .opt.wrong{border-color:var(--rose);background:rgba(242,99,126,.14)}
+  .dots{display:flex;gap:4px;margin-top:6px}
+  .dots i{flex:1;height:4px;border-radius:99px;background:var(--panel-2)}
+  .dots i.done{background:var(--teal)}
+  .rv{border:1px solid var(--line);border-radius:13px;padding:14px;background:var(--panel-2);margin-top:10px}
+  .rv.ok{border-left:3px solid var(--teal)} .rv.no{border-left:3px solid var(--rose)}
+  .rv .q{font-size:14.5px;font-weight:700;line-height:1.5}
+  .rv .a{font-size:13.5px;line-height:1.65;color:var(--ink-soft);margin-top:8px}
+  .rv .a b{color:var(--teal)} .rv .a s{color:var(--rose);text-decoration:none;font-weight:700}
+  .center-col{text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px}
+
+  /* bottom tab bar */
+  nav.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;
+    background:rgba(7,13,18,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line);
+    padding-bottom:env(safe-area-inset-bottom)}
+  html[data-contrast="on"] nav.bar{background:#000}
+  nav.bar button{flex:1;background:none;border:none;padding:11px 4px 12px;display:flex;flex-direction:column;
+    align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--ink-faint)}
+  nav.bar button[aria-selected="true"]{color:var(--teal)}
+  .note{font-size:12.5px;color:var(--ink-faint);line-height:1.7;margin-top:20px;border-top:1px solid var(--line);padding-top:14px}
+  .note b{color:var(--ink-soft)}
+  @media (min-width:700px){ .card{min-height:420px} }
+</style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <span class="badge">WGU D467 · Exploring Data</span>
+    <h1>Mastery Dashboard</h1>
+    <p class="sub">Study anywhere. Ten questions, two minutes, one skill at a time.</p>
+    <div class="toprow">
+      <span id="voicePill" class="mini">Checking voice</span>
+      <button class="mini" id="contrastBtn">Contrast: off</button>
+      <button class="mini" id="resetBtn">Reset progress</button>
+    </div>
+  </header>
+  <main id="app"></main>
+  <p class="note">
+    <b>Made for Brave on a phone.</b> Everything lives in this one file, so it runs with Shields all the way up and works
+    with no signal. Swipe the card left or right to move. Tap it to flip. Your progress saves on this device.
+    If the voice reader stays quiet, allow device recognition in Shields for this page.
+  </p>
+</div>
+
+<nav class="bar" role="tablist">
+  <button role="tab" data-view="dash" aria-selected="true"><span class="i">◈</span>Dashboard</button>
+  <button role="tab" data-view="study" aria-selected="false"><span class="i">▣</span>Study</button>
+  <button role="tab" data-view="exam" aria-selected="false"><span class="i">◷</span>Exam</button>
+</nav>
+
+<script>
+/* ---------------- data ---------------- */
+const S1="Skill 1: Data Structures, Types & Integrity";
+const S2="Skill 2: Best Practices for Organizing Data";
+const S3="Skill 3: Cleaning & Verifying Data (SQL)";
+
+const CARDS=[
+ {id:1,course:"Prepare Data for Exploration",module:"Module 1: The Importance of Integrity",skill:S1,term:"Data Integrity",definition:"The accuracy, completeness, consistency, and trustworthiness of data throughout its lifecycle.",sql:null,icon:"🛡️"},
+ {id:2,course:"Prepare Data for Exploration",module:"Module 1: The Importance of Integrity",skill:S1,term:"Margin of Error",definition:"A statistic expressing the amount of random sampling error in the results of a survey or data analysis.",sql:null,icon:"📐"},
+ {id:3,course:"Prepare Data for Exploration",module:"Module 2: Data Responsibility",skill:S1,term:"Data Anonymization",definition:"The process of protecting sensitive personal identifiers (PII) by removing, hashing, or suppressing direct markers to preserve privacy while keeping statistical value.",sql:null,icon:"🔒"},
+ {id:4,course:"Process Data from Dirty to Clean",module:"Module 1: The Importance of Integrity",skill:S1,term:"Structured vs. Unstructured Data",definition:"Structured data sits in fixed fields such as tables and databases. Unstructured data has no predefined model, like images, video, and free text.",sql:null,icon:"📊"},
+ {id:5,course:"Prepare Data for Exploration",module:"Module 3: Database Essentials",skill:S2,term:"Metadata",definition:"Structured information that describes, explains, or locates a resource so it is easier to retrieve, use, and manage. In short, data about data.",sql:null,icon:"🏷️"},
+ {id:6,course:"Prepare Data for Exploration",module:"Module 3: Database Essentials",skill:S2,term:"Primary Key vs. Foreign Key",definition:"A primary key uniquely identifies a record in a table. A foreign key is a field in one table that points to the primary key in another, creating the relational link.",sql:"ALTER TABLE Orders\nADD CONSTRAINT FK_Customer\nFOREIGN KEY (CustomerID)\nREFERENCES Customers(CustomerID);",icon:"🔑"},
+ {id:7,course:"Prepare Data for Exploration",module:"Module 4: Organize and Protect Data",skill:S2,term:"Data Encryption & Security",definition:"Securing data at rest and in transit with cryptographic algorithms so unauthorized users cannot read sensitive records.",sql:null,icon:"🛡️"},
+ {id:8,course:"Process Data from Dirty to Clean",module:"Module 2: Clean Data for More Accurate Insights",skill:S3,term:"Data Validation",definition:"A process to check the accuracy and quality of data before importing, processing, or analyzing it, such as checking data types, ranges, and null constraints.",sql:null,icon:"✅"},
+ {id:9,course:"Process Data from Dirty to Clean",module:"Module 3: Data Cleaning with SQL",skill:S3,term:"SQL Order of Execution",definition:"The logical sequence SQL follows: FROM, then WHERE, then GROUP BY, then HAVING, then SELECT, then DISTINCT, then ORDER BY, then LIMIT.",sql:"SELECT country, COUNT(*)\nFROM Customers\nWHERE age > 18\nGROUP BY country\nHAVING COUNT(*) > 5\nORDER BY country ASC;",icon:"⚡"},
+ {id:10,course:"Process Data from Dirty to Clean",module:"Module 3: Data Cleaning with SQL",skill:S3,term:"TRIM & CLEAN Functions",definition:"Functions that remove leading and trailing spaces (TRIM) or non printable characters (CLEAN) from string fields.",sql:"SELECT TRIM(customer_name) AS clean_name\nFROM customer_leads;",icon:"✂️"},
+ {id:11,course:"Process Data from Dirty to Clean",module:"Module 3: Data Cleaning with SQL",skill:S3,term:"COALESCE Function",definition:"Returns the first value that is not null from a list of arguments. Used often to handle missing values while cleaning.",sql:"SELECT COALESCE(phone_number, email, 'No Contact Available')\n  AS primary_contact\nFROM Leads;",icon:"🧩"},
+ {id:12,course:"Process Data from Dirty to Clean",module:"Module 4: Verify and Report on Cleaning Results",skill:S3,term:"Changelog / Audit Trail",definition:"A documented record of every data change, transformation, and cleaning routine, kept for transparency, reproducibility, and verification.",sql:null,icon:"📝"}
+];
+
+const BANKS={
+ [S1]:[
+  {q:"Which choice best describes data integrity?",o:["The accuracy, completeness, consistency, and trustworthiness of data across its lifecycle","The total number of rows stored in a table","The speed at which a query returns results","The visual style used in a dashboard"],a:0},
+  {q:"A survey reports 62 percent support with a margin of error of 4 points. What does that tell you?",o:["The true value likely falls between 58 and 66 percent","Exactly 4 percent of the answers were wrong","The sample was too small to use","The survey must be repeated four times"],a:0},
+  {q:"Which item is unstructured data?",o:["A folder of customer service voice recordings","A spreadsheet of order dates","A relational table of employee IDs","A CSV export of daily sales"],a:0},
+  {q:"What is the main purpose of data anonymization?",o:["To protect personal identifiers while keeping the data useful for analysis","To delete every record that contains a name","To compress files so they load faster","To translate data into another language"],a:0},
+  {q:"Your sample size is far too small for the population. What is the likely result?",o:["A wide margin of error and weak confidence in the findings","Perfectly clean data with no nulls","Faster and more reliable conclusions","A guaranteed bias free result"],a:0},
+  {q:"A Boolean data type stores which kind of value?",o:["True or false","Any whole number","Dates and times","Free form text"],a:0},
+  {q:"Which source is first party data?",o:["Data your own company collected directly from its customers","A market report purchased from a vendor","Data scraped from a public forum","Numbers quoted in a news article"],a:0},
+  {q:"Long data and wide data differ in what way?",o:["Long data spreads each subject across multiple rows while wide data keeps each subject in one row with many columns","Long data can only hold text values","Wide data must always be sorted by date","There is no structural difference, only file size"],a:0},
+  {q:"A file transferred between systems arrives with scrambled characters. This is an example of what?",o:["Data corruption during transfer","A margin of error","Sampling bias","Normalization"],a:0},
+  {q:"Why is a null different from a zero?",o:["A null means no value was recorded while zero is a real measured value","They are identical in every database","Zero always means missing data","A null is only used for text fields"],a:0}
+ ],
+ [S2]:[
+  {q:"Metadata is best defined as which of the following?",o:["Information that describes and locates other data","A backup copy of a database","The largest table in a warehouse","A chart built from raw records"],a:0},
+  {q:"What does a primary key guarantee?",o:["Each record in the table can be identified uniquely","Every column allows null values","The table will sort itself alphabetically","Two tables share the same name"],a:0},
+  {q:"A foreign key in the Orders table points to CustomerID in the Customers table. What does this create?",o:["A relational link between the two tables","A duplicate of the Customers table","An index that blocks new orders","A permanent merge of both tables"],a:0},
+  {q:"Which file naming habit supports a clean, sortable archive?",o:["A consistent pattern with dates written as YYYYMMDD","Whatever name feels quickest that day","Spaces and special characters for readability","Version numbers written only inside the file"],a:0},
+  {q:"Why do teams agree on naming conventions before a project starts?",o:["Shared, predictable names let anyone find and trust the right file","It makes the files smaller on disk","It removes the need for backups","It automatically cleans the data"],a:0},
+  {q:"Encryption at rest protects data in which state?",o:["While it is stored on a disk or in a database","Only while it travels across a network","Only while it displays on screen","Only after it is deleted"],a:0},
+  {q:"The principle of least privilege means what for data access?",o:["Each person gets only the access their work requires","Everyone shares one administrator login","Access is granted to all staff by default","Access is reviewed once every ten years"],a:0},
+  {q:"What is the value of a metadata repository?",o:["It gives one trusted place to look up where data came from and what it means","It stores the raw data itself for analysis","It replaces the need for a primary key","It converts unstructured data into tables"],a:0},
+  {q:"Storing the same customer address in five different tables invites which problem?",o:["Inconsistent updates that break data integrity","Faster reporting across the company","Stronger encryption of the records","An automatic audit trail"],a:0},
+  {q:"Which practice best protects work as a project moves forward?",o:["A clear folder structure with archived versions and a naming standard","Saving every draft to the desktop","Emailing files to yourself as the only backup","Overwriting the original file each time"],a:0}
+ ],
+ [S3]:[
+  {q:"Which sequence shows the correct SQL order of execution?",o:["FROM, WHERE, GROUP BY, HAVING, SELECT, ORDER BY","SELECT, FROM, WHERE, ORDER BY, GROUP BY","WHERE, SELECT, FROM, HAVING, ORDER BY","GROUP BY, SELECT, FROM, WHERE, LIMIT"],a:0},
+  {q:"A name field imported with extra spaces around it. Which function fixes it?",o:["TRIM","LENGTH","CAST","DISTINCT"],a:0},
+  {q:"What does COALESCE return?",o:["The first value in the list that is not null","The largest value in a column","The count of null rows","A list of duplicate records"],a:0},
+  {q:"You must filter a group total after aggregation. Which clause do you use?",o:["HAVING","WHERE","ORDER BY","LIMIT"],a:0},
+  {q:"A numeric year column was stored as text. Which function converts it for calculation?",o:["CAST","TRIM","COALESCE","SUBSTR"],a:0},
+  {q:"Which query returns unique country values with no repeats?",o:["SELECT DISTINCT country FROM Customers","SELECT country FROM Customers","SELECT COUNT(country) FROM Customers","SELECT TRIM(country) FROM Customers"],a:0},
+  {q:"You suspect some product codes are the wrong size. Which function helps you find them?",o:["LENGTH","COALESCE","HAVING","CAST"],a:0},
+  {q:"SUBSTR is used for which cleaning task?",o:["Pulling a specific portion of a text string","Removing null rows from a table","Joining two tables together","Sorting results by date"],a:0},
+  {q:"Why do analysts keep a changelog during cleaning?",o:["It documents every change so the work is transparent and repeatable","It speeds up the queries themselves","It replaces the need to verify results","It hides errors from stakeholders"],a:0},
+  {q:"What is the strongest way to verify a cleaning job before analysis?",o:["Compare the cleaned results against the source and recheck row counts and key fields","Trust the query since it ran without an error","Ask a teammate for their opinion of the chart","Delete any row that looks unusual"],a:0}
+ ]
+};
+
+const SKILLS=[
+ {key:S1,label:"Skill 1",title:"Data structures, types, and integrity",blurb:"Know what the data is and whether you can trust it."},
+ {key:S2,label:"Skill 2",title:"Organizing and protecting data",blurb:"Keys, metadata, naming, and access that hold up over time."},
+ {key:S3,label:"Skill 3",title:"Cleaning and verifying with SQL",blurb:"Turn dirty records into proof you can defend."}
+];
+const PASS=8, EXAM_SECONDS=120;
+
+/* ---------------- storage, guarded so it never breaks the page ---------------- */
+const store={
+  read(){ try{ const raw=localStorage.getItem("d467"); return raw?JSON.parse(raw):null; }catch(e){ return null; } },
+  write(o){ try{ localStorage.setItem("d467",JSON.stringify(o)); }catch(e){} },
+  clear(){ try{ localStorage.removeItem("d467"); }catch(e){} }
+};
+
+const saved=store.read()||{};
+const state={
+  view:"dash",
+  mastered:new Set(saved.mastered||[]),
+  best:saved.best||{},
+  filter:"ALL", index:0, flipped:false, speaking:false, exam:null
+};
+function save(){ store.write({mastered:[...state.mastered],best:state.best}); }
+
+const app=document.getElementById("app");
+const cardsOf=s=> s==="ALL"?CARDS:CARDS.filter(c=>c.skill===s);
+const masteredIn=s=>cardsOf(s).filter(c=>state.mastered.has(c.id)).length;
+const esc=t=>String(t).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+const mmss=s=>String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+const buzz=ms=>{ try{ navigator.vibrate && navigator.vibrate(ms); }catch(e){} };
+
+/* ---------------- voice ---------------- */
+const canSpeak="speechSynthesis" in window;
+function voicePill(){
+  const p=document.getElementById("voicePill");
+  if(!canSpeak){ p.textContent="Voice off"; p.className="mini off"; return; }
+  const n=window.speechSynthesis.getVoices().length;
+  p.textContent=n?"Voice ready":"Voice loading";
+  p.className="mini "+(n?"ok":"off");
+}
+if(canSpeak){ window.speechSynthesis.onvoiceschanged=voicePill; setTimeout(voicePill,400); }
+function stopSpeech(){ if(canSpeak) window.speechSynthesis.cancel(); state.speaking=false; }
+function speak(t){
+  if(!canSpeak) return;
+  if(state.speaking){ stopSpeech(); return render(); }
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(t); u.rate=.92;
+  u.onstart=()=>{state.speaking=true;render();};
+  u.onend=u.onerror=()=>{state.speaking=false;render();};
+  window.speechSynthesis.speak(u);
+}
+
+/* ---------------- dashboard ---------------- */
+function readiness(){
+  const c=state.mastered.size/CARDS.length;
+  const e=SKILLS.reduce((t,s)=>t+((state.best[s.key]||0)/10),0)/SKILLS.length;
+  return Math.round((c*.5+e*.5)*100);
+}
+function viewDash(){
+  const r=readiness(), passed=SKILLS.filter(s=>(state.best[s.key]||0)>=PASS).length;
+  let bars=""; for(let i=0;i<16;i++) bars+=`<span class="${(i+1)/16*100<=r?'lit':''}" style="height:${14+i*2.2}px"></span>`;
+  return `
+  <section class="panel">
+    <span class="eyebrow">Exam readiness</span>
+    <div class="big">${r}<span style="font-size:19px;color:var(--ink-soft)">%</span></div>
+    <p class="muted" style="margin:8px 0 0">Half comes from cards mastered. Half comes from your best exam run in each skill.
+      ${passed===3?"All three skills are passed. You are ready.":`Skills passed: ${passed} of 3. Keep climbing.`}</p>
+    <div class="ladder">${bars}</div>
+    <div class="rail" style="margin-top:14px"><i style="width:${r}%"></i></div>
+  </section>
+  ${SKILLS.map(s=>{
+    const total=cardsOf(s.key).length,m=masteredIn(s.key),best=state.best[s.key],ready=m===total;
+    const chip=best===undefined?`<span class="chip">No attempt</span>`:`<span class="chip ${best>=PASS?'pass':'fail'}">Best ${best}/10</span>`;
+    return `<section class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+        <span class="eyebrow">${s.label}</span>${chip}</div>
+      <h3 class="title">${s.title}</h3>
+      <p class="muted">${s.blurb}</p>
+      <div class="stat-row"><span>Cards mastered</span><span>${m} / ${total}</span></div>
+      <div class="rail"><i style="width:${m/total*100}%"></i></div>
+      <button class="btn solid" data-exam="${esc(s.key)}" ${ready?"":"disabled"}>▶ Start the 2 minute exam</button>
+      <button class="btn" data-study="${esc(s.key)}">Study these cards</button>
+      <div class="lockline">${ready?"◷ Unlocked. 10 questions, 2 minutes"
+        :`🔒 ${total-m} card(s) left to master. <button class="tap" style="color:var(--teal);padding:2px 6px" data-force="${esc(s.key)}">Start early</button>`}</div>
+    </section>`;
+  }).join("")}`;
+}
+
+/* ---------------- study ---------------- */
+function viewStudy(){
+  const list=cardsOf(state.filter);
+  if(state.index>=list.length) state.index=0;
+  const c=list[state.index], on=state.mastered.has(c.id);
+  return `
+  <div class="filters">
+    ${[{k:"ALL",l:"All cards"}].concat(SKILLS.map(s=>({k:s.key,l:s.label}))).map(t=>
+      `<button class="fchip" aria-pressed="${state.filter===t.k}" data-filter="${esc(t.k)}">${t.l}</button>`).join("")}
+  </div>
+  <div class="crumb"><span class="path">${c.module}</span><span>${state.index+1} / ${list.length}</span></div>
+  <div class="scene" id="scene">
+    <div class="card ${state.flipped?"flipped":""}" id="flipCard">
+      <div class="face">
+        <div class="ftop">
+          <span class="glyph">${c.icon}</span>
+          <button class="tap ${on?"on":""}" data-master="${c.id}">${on?"✓ Mastered":"Mark mastered"}</button>
+        </div>
+        <div class="center">
+          <span class="eyebrow">${esc(c.skill)}</span>
+          <h2 class="term">${esc(c.term)}</h2>
+          <p class="hint">Tap to flip. Swipe to move.</p>
+        </div>
+        <div class="ffoot"><span>${c.course}</span>
+          <button class="tap ${state.speaking?"on":""}" data-say="${esc(c.term)}">🔊 Term</button></div>
+      </div>
+      <div class="face back">
+        <div class="ftop"><span class="eyebrow" style="color:var(--teal)">Definition</span>
+          <button class="tap ${state.speaking?"on":""}" data-say="${esc(c.definition)}">🔊 Listen</button></div>
+        <div class="def">${esc(c.definition)}${c.sql?`<pre class="sql">${esc(c.sql)}</pre>`:""}</div>
+        <div class="ffoot"><span>Tap to flip back</span><span>${on?"Mastered":"In progress"}</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="swipebar">
+    <button class="round" data-step="-1" aria-label="Previous">‹</button>
+    <button class="btn solid" style="margin-top:0" data-say="${esc(c.term+". "+c.definition)}">🔊 Read the whole card</button>
+    <button class="round" data-step="1" aria-label="Next">›</button>
+  </div>`;
+}
+
+/* ---------------- exam ---------------- */
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+function startExam(skill){
+  stopSpeech();
+  const qs=shuffle(BANKS[skill]).map(x=>({q:x.q,opts:shuffle(x.o),correct:x.o[x.a]}));
+  state.exam={skill,qs,answers:new Array(qs.length).fill(null),i:0,left:EXAM_SECONDS,done:false,locked:false,timer:null};
+  state.exam.timer=setInterval(tick,1000);
+  state.view="exam"; render(); window.scrollTo(0,0);
+}
+function tick(){
+  const e=state.exam; if(!e||e.done) return;
+  e.left--; if(e.left<=0){ e.left=0; return finishExam(); }
+  const c=document.getElementById("clock"), b=document.getElementById("tbar");
+  const cls=e.left<=10?"crit":e.left<=30?"warn":"";
+  if(c){ c.textContent=mmss(e.left); c.className="clock "+cls; }
+  if(b){ b.className="tbar "+cls; b.querySelector("i").style.width=(e.left/EXAM_SECONDS*100)+"%"; }
+  if(e.left===30||e.left===10) buzz(30);
+}
+function answer(choice){
+  const e=state.exam; if(!e||e.done||e.locked) return;
+  e.answers[e.i]=choice; e.locked=true; buzz(choice===e.qs[e.i].correct?20:[15,60,15]); render();
+  setTimeout(()=>{
+    if(!state.exam||state.exam.done) return;
+    e.locked=false;
+    if(e.i<e.qs.length-1){ e.i++; render(); window.scrollTo(0,0); } else finishExam();
+  },750);
+}
+function finishExam(){
+  const e=state.exam; if(!e||e.done) return;
+  clearInterval(e.timer); e.done=true;
+  e.score=e.qs.reduce((t,q,n)=>t+(e.answers[n]===q.correct?1:0),0);
+  e.used=EXAM_SECONDS-e.left;
+  if(e.score>(state.best[e.skill]??-1)){ state.best[e.skill]=e.score; save(); }
+  buzz(e.score>=PASS?[30,50,30]:20); render(); window.scrollTo(0,0);
+}
+function examPicker(){
+  return `<section class="panel">
+    <span class="eyebrow">Exam simulator</span>
+    <h3 class="title">Pick the skill you are ready to prove</h3>
+    <p class="muted">Ten questions. Two minutes. Questions and answer choices shuffle every run, so you learn the idea and not the position. Eight correct passes the skill.</p>
+  </section>
+  ${SKILLS.map(s=>{
+    const total=cardsOf(s.key).length,m=masteredIn(s.key),best=state.best[s.key];
+    return `<section class="panel">
+      <span class="eyebrow">${s.label}</span>
+      <h3 class="title">${s.title}</h3>
+      <div class="stat-row"><span>Cards mastered</span><span>${m} / ${total}</span></div>
+      <div class="rail"><i style="width:${m/total*100}%"></i></div>
+      <button class="btn solid" data-force="${esc(s.key)}">▶ ${best===undefined?"Start exam":"Retake exam"}</button>
+      <div class="lockline">${best===undefined?"◷ 10 questions, 2 minutes":`Best so far ${best} of 10`}</div>
+    </section>`;
+  }).join("")}`;
+}
+function examRun(){
+  const e=state.exam,q=e.qs[e.i],cls=e.left<=10?"crit":e.left<=30?"warn":"";
+  return `<div class="examtop">
+    <div class="clockrow">
+      <div><span class="eyebrow">Question ${e.i+1} of ${e.qs.length}</span>
+        <div class="dots" style="width:150px">${e.qs.map((_,n)=>`<i class="${n<e.i||(n===e.i&&e.locked)?"done":""}"></i>`).join("")}</div></div>
+      <div style="text-align:right"><span class="eyebrow">Time left</span>
+        <div id="clock" class="clock ${cls}">${mmss(e.left)}</div></div>
+    </div>
+    <div id="tbar" class="tbar ${cls}"><i style="width:${e.left/EXAM_SECONDS*100}%"></i></div>
+  </div>
+  <h3 class="qtext">${esc(q.q)}</h3>
+  ${q.opts.map((o,n)=>{
+    let c="opt";
+    if(e.locked){ if(o===q.correct) c+=" right"; else if(o===e.answers[e.i]) c+=" wrong"; }
+    return `<button class="${c}" data-answer="${n}"><b>${"ABCD"[n]}</b><span>${esc(o)}</span></button>`;
+  }).join("")}
+  <button class="btn" data-quit="1">End and score now</button>`;
+}
+function examResult(){
+  const e=state.exam,pct=Math.round(e.score/e.qs.length*100),pass=e.score>=PASS;
+  const s=SKILLS.find(x=>x.key===e.skill);
+  return `<section class="panel">
+    <div class="center-col">
+      <span class="eyebrow">${s.label} result</span>
+      <div class="big" style="color:${pass?"var(--teal)":"var(--amber)"}">${e.score}<span style="font-size:19px;color:var(--ink-soft)"> / 10</span></div>
+      <p class="muted">${pass
+        ? `${pct} percent, with ${mmss(EXAM_SECONDS-e.used)} still on the clock. This skill is planted and growing.`
+        : `${pct} percent. The pass mark is ${PASS} of 10. Study the misses below, then come straight back.`}</p>
+    </div>
+    <button class="btn solid" data-force="${esc(e.skill)}">Retake this exam</button>
+    <div class="btn-row"><button class="btn row" data-study="${esc(e.skill)}">Review cards</button>
+      <button class="btn row" data-goto="dash">Dashboard</button></div>
+  </section>
+  ${e.qs.map((q,n)=>{
+    const mine=e.answers[n],ok=mine===q.correct;
+    return `<div class="rv ${ok?"ok":"no"}"><div class="q">${n+1}. ${esc(q.q)}</div>
+      <div class="a">${ok?`<b>Correct.</b> ${esc(q.correct)}`
+        :`<s>You chose: ${mine?esc(mine):"left blank"}</s><br><b>Correct: ${esc(q.correct)}</b>`}</div></div>`;
+  }).join("")}`;
+}
+const viewExam=()=> !state.exam ? examPicker() : (state.exam.done?examResult():examRun());
+
+/* ---------------- render and events ---------------- */
+function render(){
+  document.querySelectorAll("nav.bar button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.view===state.view)));
+  app.innerHTML = state.view==="dash"?viewDash() : state.view==="study"?viewStudy() : viewExam();
+  if(state.view==="study") bindSwipe();
+}
+function bindSwipe(){
+  const scene=document.getElementById("scene"); if(!scene) return;
+  let x0=null,y0=null,moved=false;
+  scene.addEventListener("touchstart",e=>{x0=e.touches[0].clientX;y0=e.touches[0].clientY;moved=false;},{passive:true});
+  scene.addEventListener("touchmove",e=>{
+    if(x0===null) return;
+    const dx=e.touches[0].clientX-x0, dy=e.touches[0].clientY-y0;
+    if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.4&&!moved){ moved=true; step(dx<0?1:-1); buzz(12); }
+  },{passive:true});
+  scene.addEventListener("touchend",()=>{x0=null;},{passive:true});
+}
+function step(n){
+  stopSpeech();
+  const list=cardsOf(state.filter);
+  state.index=(state.index+n+list.length)%list.length;
+  state.flipped=false; render();
+}
+document.addEventListener("click",ev=>{
+  const t=ev.target.closest("[data-view],[data-filter],[data-step],[data-master],[data-say],[data-exam],[data-force],[data-study],[data-answer],[data-quit],[data-goto],#flipCard");
+  if(!t) return;
+  const d=t.dataset;
+  if(d.view){ if(d.view!=="exam"){ if(state.exam) clearInterval(state.exam.timer); state.exam=null; }
+    stopSpeech(); state.view=d.view; render(); return window.scrollTo(0,0); }
+  if(d.goto){ state.exam=null; state.view=d.goto; render(); return window.scrollTo(0,0); }
+  if(d.exam||d.force) return startExam(d.exam||d.force);
+  if(d.study!==undefined){ if(state.exam){clearInterval(state.exam.timer);state.exam=null;}
+    state.filter=d.study; state.index=0; state.flipped=false; state.view="study"; render(); return window.scrollTo(0,0); }
+  if(d.filter!==undefined){ state.filter=d.filter; state.index=0; state.flipped=false; return render(); }
+  if(d.step) return step(Number(d.step));
+  if(d.master){ const id=Number(d.master);
+    state.mastered.has(id)?state.mastered.delete(id):state.mastered.add(id); save(); buzz(15); return render(); }
+  if(d.say) return speak(d.say);
+  if(d.answer!==undefined) return answer(state.exam.qs[state.exam.i].opts[Number(d.answer)]);
+  if(d.quit) return finishExam();
+  if(t.id==="flipCard"){ state.flipped=!state.flipped; buzz(10); return render(); }
+});
+document.getElementById("contrastBtn").addEventListener("click",e=>{
+  const on=document.documentElement.dataset.contrast==="on";
+  document.documentElement.dataset.contrast=on?"off":"on";
+  e.currentTarget.textContent="Contrast: "+(on?"off":"on");
+});
+document.getElementById("resetBtn").addEventListener("click",()=>{
+  state.mastered.clear(); state.best={}; store.clear(); state.exam=null; state.view="dash"; render();
+});
+document.addEventListener("visibilitychange",()=>{ if(document.hidden) stopSpeech(); });
+render();
+</script>
+</body>
+</html>
